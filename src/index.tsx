@@ -1,20 +1,34 @@
 import { hideAsync, preventAutoHideAsync } from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
 import Lottie from 'lottie-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
+import styled, { css } from 'styled-components/native';
 import type { FC } from 'react';
 
 import loading from './assets/animation.json';
+import { AppScreen } from './components';
+import { ThemeProvider, useTheme } from './contexts';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const MainScreen: FC = () => {
+  const { changeTheme } = useTheme();
+
+  const StyledText = styled(Text)`
+    ${({ theme: { colors, fonts } }) => css`
+      color: ${colors.text};
+      ${fonts.title};
+    `}
+  `;
+
+  return (
+    <View style={{ marginTop: 100 }}>
+      <Text>Open up App.js to start working on your appx!!</Text>
+
+      <TouchableOpacity onPress={changeTheme} style={{ marginVertical: 10, padding: 10, backgroundColor: 'blue' }}>
+        <StyledText>Change theme</StyledText>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const App: FC = () => {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -41,7 +55,7 @@ const App: FC = () => {
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(setDataIsReady(true));
-        }, 5000);
+        }, 2000);
       });
     }
 
@@ -51,15 +65,11 @@ const App: FC = () => {
   if (!appIsReady) return null;
 
   return (
-    <View style={styles.container} onLayout={onLayoutRootView}>
-      <StatusBar style="auto" />
-
-      {dataIsReady ? (
-        <Text>Open up App.js to start working on your appx!!</Text>
-      ) : (
-        <Lottie source={loading} autoPlay loop speed={3} />
-      )}
-    </View>
+    <ThemeProvider>
+      <AppScreen onLayout={onLayoutRootView} withEdges={['top']}>
+        {dataIsReady ? <MainScreen /> : <Lottie source={loading} autoPlay loop speed={2} />}
+      </AppScreen>
+    </ThemeProvider>
   );
 };
 
