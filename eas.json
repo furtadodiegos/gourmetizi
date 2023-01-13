@@ -1,12 +1,30 @@
 {
   "build": {
     "development": {
+      "channel": "development",
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "APP_ENV": "development"
+      }
     },
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "staging": {
+      "channel": "staging",
+      "env": {
+        "APP_ENV": "staging"
+      }
+    },
+    "production": {
+      "channel": "production",
+      "env": {
+        "APP_ENV": "production"
+      },
+      "cache": {
+        "key": "invalidate1"
+      }
+    }
   }
 }
