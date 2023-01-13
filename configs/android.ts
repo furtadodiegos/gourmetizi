@@ -24,5 +24,6 @@ export default {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#7d24e1',
     },
+    versionCode: 1,
   },
 } as AndroidBuildProps;
