@@ -22,11 +22,15 @@ export default (): ExpoConfig => ({
     fallbackToCacheTimeout: 0,
   },
   assetBundlePatterns: ['**/*'],
+  runtimeVersion: {
+    policy: 'appVersion',
+  },
   ios: {
     ...ios,
     bundleIdentifier: ios.bundleIdentifier[APP_ENV],
   },
   android: {
+    ...android,
     package: android.package[APP_ENV],
     adaptiveIcon: { ...android.adaptiveIcon[APP_ENV] },
   },

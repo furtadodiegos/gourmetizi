@@ -14,7 +14,7 @@ export default {
     development: 'com.dfti.gourmetizi.development',
   },
   config: {
-    usesNonExemptEncryption: false, // ITSAppUsesNonExemptEncryption = false don't ask about encryption compliance for every build upload to Connect
+    usesNonExemptEncryption: false,
   },
   infoPlist: {
     NSLocationWhenInUseUsageDescription: 'We need to access your Location to send you relevant notifications.',
