@@ -3,7 +3,7 @@ import Lottie from 'lottie-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import styled, { css } from 'styled-components/native';
-import type { FC } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 
 import loading from './assets/animation.json';
 import { AppScreen } from './components';
@@ -29,6 +29,8 @@ const MainScreen: FC = () => {
     </View>
   );
 };
+
+export const AppProviders: FC<PropsWithChildren> = ({ children }) => <ThemeProvider>{children}</ThemeProvider>;
 
 const App: FC = () => {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -65,11 +67,11 @@ const App: FC = () => {
   if (!appIsReady) return null;
 
   return (
-    <ThemeProvider>
+    <AppProviders>
       <AppScreen onLayout={onLayoutRootView} withEdges={['top']}>
         {dataIsReady ? <MainScreen /> : <Lottie source={loading} autoPlay loop speed={2} />}
       </AppScreen>
-    </ThemeProvider>
+    </AppProviders>
   );
 };
 
