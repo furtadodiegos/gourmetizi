@@ -20,6 +20,7 @@ export default (): ExpoConfig => ({
   },
   updates: {
     fallbackToCacheTimeout: 0,
+    url: 'https://u.expo.dev/3fa5b952-57d0-4d92-b97c-5437d885fec2',
   },
   assetBundlePatterns: ['**/*'],
   runtimeVersion: {

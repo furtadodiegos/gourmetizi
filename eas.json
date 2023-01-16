@@ -9,7 +9,8 @@
       }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "channel": "preview"
     },
     "staging": {
       "channel": "staging",
