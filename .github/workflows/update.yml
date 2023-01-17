@@ -16,11 +16,14 @@ jobs:
             exit 1
           fi
 
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      # - name: Checkout repository
+      #   uses: actions/checkout@v2
 
       # - name: Set env BRANCH
       #   run: echo "BRANCH=$(echo $GITHUB_REF )" >> $GITHUB_ENV
+
+      - name: Setup EAS
+        uses: ./.github/actions/eas
 
       - name: Set env EXPO_BRANCH
         run: |
@@ -32,9 +35,6 @@ jobs:
           else
               echo "EXPO_BRANCH=production" >> "$GITHUB_ENV"
           fi
-
-      - name: Setup EAS
-        uses: ./.github/actions/eas
 
       - name: Publish update
         run: |
