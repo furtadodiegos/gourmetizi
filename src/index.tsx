@@ -23,7 +23,7 @@ const MainScreen: FC = () => {
     <View style={{ marginTop: 100 }}>
       <Text>Open up App.js to start working on your appx!!</Text>
 
-      <TouchableOpacity onPress={changeTheme} style={{ marginVertical: 10, padding: 10, backgroundColor: 'blue' }}>
+      <TouchableOpacity onPress={changeTheme} style={{ marginVertical: 10, padding: 10, backgroundColor: 'green' }}>
         <StyledText>Change theme</StyledText>
       </TouchableOpacity>
     </View>

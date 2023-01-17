@@ -6,8 +6,9 @@
     /* Completeness */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "strict": false,
+    "moduleResolution": "node",
     "types": ["jest", "styled-components-react-native"],
     "typeRoots": ["node_modules/@types"]
   },
-  "exclude": ["**/__tests__/**", "**/?*test.*", "**/?*spec.*", "app.config.ts", "metro.config.ts", "webpack.config.ts"]
+  "exclude": ["**/__tests__/**", "**/?*test.*", "**/?*spec.*"]
 }
