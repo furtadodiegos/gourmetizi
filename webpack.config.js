@@ -1,3 +1,8 @@
-require('ts-node/register');
+import createExpoWebpackConfigAsync from '@expo/webpack-config/webpack';
+import type { Arguments, Environment } from '@expo/webpack-config/webpack/types';
 
-module.exports = require('./webpack.config.ts');
+module.exports = async function (env: Environment, argv: Arguments) {
+  const config = await createExpoWebpackConfigAsync(env, argv);
+  // Customize the config before returning it.
+  return config;
+};
