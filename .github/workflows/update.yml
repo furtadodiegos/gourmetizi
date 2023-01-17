@@ -1,9 +1,12 @@
-name: update
-on: push
+name: Update
+on:
+  push:
+    tags:
+      - 'runtime-*'
 
 jobs:
   update:
-    name: EAS Update
+    name: EAS Updates
     runs-on: ubuntu-latest
     steps:
       - name: Check for EXPO_TOKEN
@@ -13,35 +16,24 @@ jobs:
             exit 1
           fi
 
-      # - name: Checkout repository
-      #   uses: actions/checkout@v2
+      # - name: Set env BRANCH
+      #   run: echo "BRANCH=$(echo $GITHUB_REF )" >> $GITHUB_ENV
 
-      # - name: Setup Node
-      #   uses: actions/setup-node@v2
-      #   with:
-      #     node-version: 16.x
-      #     cache: yarn
+      - name: Set env EXPO_BRANCH
+        run: |
+          echo "Variables X"
+          echo ${{github.head_ref}}
+          echo ${{github.ref_name}}
+          if [[ github.head_ref || github.ref_name == 'staging' ]]; then
+              echo "EXPO_BRANCH=staging" >> "$GITHUB_ENV"
+          else
+              echo "EXPO_BRANCH=production" >> "$GITHUB_ENV"
+          fi
 
-      # - name: Setup Expo
-      #   uses: expo/expo-github-action@v7
-      #   with:
-      #     expo-version: latest
-      #     eas-version: latest
-      #     token: ${{ secrets.EXPO_TOKEN }}
+      - name: Setup EAS
+        uses: ./.github/actions/eas
 
-      # - name: Find yarn cache
-      #   id: yarn-cache-path
-      #   run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      # - name: Restore cache
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: ${{ steps.yarn-cache-path.outputs.dir }}
-      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: ${{ runner.os }}-yarn-
-
-      # - name: Install dependencies
-      #   run: yarn install --immutable
-
-      # - name: Publish update
-      #   run: eas update --auto
+      - name: Publish update
+        run: |
+          echo ${{ EXPO_BRANCH }}
+          eas update --branch ${{ EXPO_BRANCH }} --auto
