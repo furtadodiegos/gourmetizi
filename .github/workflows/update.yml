@@ -35,5 +35,5 @@ jobs:
 
       - name: Publish update
         run: |
-          echo ${{ EXPO_BRANCH }}
-          eas update --branch ${{ EXPO_BRANCH }} --auto
+          echo ${{ secrets.EXPO_BRANCH }}
+          eas update --branch ${{ secrets.EXPO_BRANCH }} --auto
