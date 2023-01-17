@@ -16,25 +16,26 @@ jobs:
             exit 1
           fi
 
-      # - name: Checkout repository
-      #   uses: actions/checkout@v2
-
-      # - name: Set env BRANCH
-      #   run: echo "BRANCH=$(echo $GITHUB_REF )" >> $GITHUB_ENV
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Setup EAS
         uses: ./.github/actions/eas
 
       - name: Set env EXPO_BRANCH
         run: |
-          echo "Variables X"
-          echo ${{github.head_ref}}
-          echo ${{github.ref_name}}
           if [[ github.head_ref || github.ref_name == 'staging' ]]; then
               echo "EXPO_BRANCH=staging" >> "$GITHUB_ENV"
           else
               echo "EXPO_BRANCH=production" >> "$GITHUB_ENV"
           fi
+
+      - name: Setup Expo
+        uses: expo/expo-github-action@v7
+        with:
+          expo-version: latest
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Publish update
         run: |
