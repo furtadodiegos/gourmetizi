@@ -9,7 +9,6 @@ const { APP_ENV } = process.env;
 export default (): ExpoConfig => ({
   name: 'GourmetIzi',
   slug: 'gourmetizi',
-  version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
   userInterfaceStyle: 'light',
@@ -23,17 +22,19 @@ export default (): ExpoConfig => ({
     url: 'https://u.expo.dev/3fa5b952-57d0-4d92-b97c-5437d885fec2',
   },
   assetBundlePatterns: ['**/*'],
-  runtimeVersion: {
-    policy: 'appVersion',
-  },
+  runtimeVersion: '1.0.0',
+  // runtimeVersion: {
+  //   policy: 'nativeVersion',
+  // },
+  // version: '1.0.0',
   ios: {
     ...ios,
-    bundleIdentifier: ios.bundleIdentifier[APP_ENV],
+    bundleIdentifier: ios.bundleIdentifier[APP_ENV ?? 'development'],
   },
   android: {
     ...android,
-    package: android.package[APP_ENV],
-    adaptiveIcon: { ...android.adaptiveIcon[APP_ENV] },
+    package: android.package[APP_ENV ?? 'development'],
+    adaptiveIcon: { ...android.adaptiveIcon[APP_ENV ?? 'development'] },
   },
   web: {
     favicon: './assets/favicon.png',
