@@ -21,7 +21,7 @@ const AppScreen: FC<PropsWithChildren<AppScreenProps>> = ({ children, barStyle, 
     <StyledSafeAreaView {...props} edges={['right', 'left'].concat(withEdges) as Edge[]}>
       <StatusBar barStyle={barStyle || (isDarkMode ? 'light-content' : 'dark-content')} />
 
-      <StyledView style={style}>{children}</StyledView>
+      <StyledView style={[style]}>{children}</StyledView>
     </StyledSafeAreaView>
   );
 };
