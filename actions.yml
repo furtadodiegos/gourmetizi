@@ -1,0 +1,47 @@
+name: Build and Deploy Expo App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn install
+
+      # check if have native changes
+      - name: Check for native code changes
+        run: |
+          git diff --name-only HEAD~1 | grep -q "ios/" && export HAS_NATIVE_CHANGES=true || export HAS_NATIVE_CHANGES=false
+          echo "HAS_NATIVE_CHANGES=$HAS_NATIVE_CHANGES"
+
+      # - name: Check for native code changes
+      #   run: |
+      #     git diff --name-only staging develop | grep -q "ios/" && export HAS_NATIVE_CHANGES=true || export HAS_NATIVE_CHANGES=false
+      #     echo "HAS_NATIVE_CHANGES=$HAS_NATIVE_CHANGES"
+
+      - name: Build native app
+        if: env.HAS_NATIVE_CHANGES == 'true'
+        run: expo build:ios --release-channel production --non-interactive
+
+      - name: Build OTA update
+        run: expo build:ios --release-channel production --no-publish --non-interactive
+
+      - name: Build native app
+        run: expo build:ios --release-channel production --non-interactive
+
+      - name: Deploy OTA update
+        run: expo publish --release-channel production --non-interactive
+
+      - name: Deploy native app
+        uses: actions/upload-artifact@v2
+        with:
+          name: ios-app.ipa
+          path: ios-build/ExpoKitApp.ipa

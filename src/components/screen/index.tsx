@@ -5,8 +5,8 @@ import type { StatusBarStyle, StyleProp, ViewProps, ViewStyle } from 'react-nati
 import type { Edge } from 'react-native-safe-area-context';
 
 import { useTheme } from '../../contexts';
-import { StyledSafeAreaView, StyledView } from './screen.styles';
-import type { StyledSafeAreaViewProps } from './screen.styles';
+import { StyledSafeAreaView, StyledView } from './screen.style';
+import type { StyledSafeAreaViewProps } from './screen.style';
 
 interface AppScreenProps extends ViewProps, StyledSafeAreaViewProps {
   barStyle?: StatusBarStyle;

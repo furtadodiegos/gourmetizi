@@ -22,11 +22,9 @@ export default (): ExpoConfig => ({
     url: 'https://u.expo.dev/3fa5b952-57d0-4d92-b97c-5437d885fec2',
   },
   assetBundlePatterns: ['**/*'],
-  runtimeVersion: '1.0.0',
-  // runtimeVersion: {
-  //   policy: 'nativeVersion',
-  // },
-  // version: '1.0.0',
+  runtimeVersion: {
+    policy: 'sdkVersion',
+  },
   ios: {
     ...ios,
     bundleIdentifier: ios.bundleIdentifier[APP_ENV ?? 'development'],

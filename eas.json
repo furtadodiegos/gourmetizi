@@ -1,34 +1,37 @@
 {
   "cli": {
-    "appVersionSource": "remote"
+    "version": ">= 0.57.0"
   },
   "build": {
     "development": {
-      "channel": "development",
       "developmentClient": true,
-      "distribution": "internal",
-      "env": {
-        "APP_ENV": "development"
-      }
+      "distribution": "internal"
     },
     "preview": {
       "distribution": "internal",
-      "channel": "preview"
+      "channel": "staging"
     },
     "staging": {
-      "channel": "staging",
-      "env": {
-        "APP_ENV": "staging"
-      }
+      "channel": "staging"
     },
     "production": {
       "channel": "production",
-      "autoIncrement": true,
-      "env": {
-        "APP_ENV": "production"
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {},
+    "staging": {
+      "android": {
+        "track": "internal",
+        "applicationId": "com.dfti.gourmetizi.staging",
+        "releaseStatus": "completed"
       },
-      "cache": {
-        "key": "invalidate1"
+      "ios": {
+        "appleId": "dfti.apps@gmail.com",
+        "appleTeamId": "9K5YUJ96KS",
+        "bundleIdentifier": "com.dfti.gourmetizi.staging",
+        "ascAppId": "1665180188"
       }
     }
   }

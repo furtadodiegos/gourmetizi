@@ -4,7 +4,7 @@ import fonts from './fonts';
 
 export default {
   colors: {
-    background: '#FF6464',
+    background: '#FFFFFF',
     text: '#000000',
     primary: '#2F6B84',
     accent: '#FF6464',

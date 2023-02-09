@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { FC, PropsWithChildren } from 'react';
 
 export interface StateProps {
