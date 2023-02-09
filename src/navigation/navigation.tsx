@@ -3,6 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import type { FC } from 'react';
 
+import { AppSplashScreen } from '../components';
+import { useSetup } from '../contexts';
 import { OnboardingScreen } from '../screens';
 import DrawerNavigation from './drawerNavigation';
 import type { NestedNavigatorParams } from '.';
@@ -16,11 +18,18 @@ export type AppNavigationParams = {
 const { Navigator, Screen } = createNativeStackNavigator<AppNavigationParams>();
 
 const AppNavigation: FC = () => {
+  const { me, isReady } = useSetup();
+
+  if (!isReady) return <AppSplashScreen isReady={isReady} />;
+
   return (
     <NavigationContainer>
-      <Navigator initialRouteName="OnboardingScreen" screenOptions={{ headerShown: false }}>
-        <Screen name="OnboardingScreen" component={OnboardingScreen} />
-        <Screen name="DrawerNavigation" component={DrawerNavigation} />
+      <Navigator initialRouteName={me ? 'DrawerNavigation' : 'OnboardingScreen'} screenOptions={{ headerShown: false }}>
+        {me ? (
+          <Screen name="DrawerNavigation" component={DrawerNavigation} />
+        ) : (
+          <Screen name="OnboardingScreen" component={OnboardingScreen} />
+        )}
       </Navigator>
     </NavigationContainer>
   );

@@ -1,31 +1,53 @@
 import React from 'react';
-import { Button, Text, TouchableOpacity } from 'react-native';
-import styled, { css } from 'styled-components/native';
+import { ActivityIndicator, Button, StyleSheet, Text } from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
 import type { FC } from 'react';
 
 import { AppScreen } from '../../components';
-import { useTheme } from '../../contexts';
+import useOnboarding from './onboarding.hook';
 import type { ScreenNavigationProps } from '../../navigation';
 
-const OnboardingScreen: FC<ScreenNavigationProps<'DrawerNavigation'>> = ({ navigation: { navigate } }) => {
-  const { changeTheme } = useTheme();
+// const StyledText = styled(Text)`
+// ${({ theme: { colors, fonts } }) => css`
+//   color: ${colors.text};
+//   ${fonts.title};
+// `}
+// `;
+const { input } = StyleSheet.create({
+  input: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#000000',
+    marginHorizontal: 10,
+    marginVertical: 20,
+  },
+});
 
-  const StyledText = styled(Text)`
-    ${({ theme: { colors, fonts } }) => css`
-      color: ${colors.text};
-      ${fonts.title};
-    `}
-  `;
+const OnboardingScreen: FC<ScreenNavigationProps<'DrawerNavigation'>> = ({ navigation: { navigate } }) => {
+  const { onLogin, loading, setVariables, variables } = useOnboarding();
 
   return (
     <AppScreen withEdges={['top']}>
       <Text>Onboarding Screen!!</Text>
 
-      <Button onPress={() => navigate('DrawerNavigation', { screen: 'BottomNavigation' })} title="Go to HomeScreen" />
+      <TextInput
+        style={input}
+        keyboardType="email-address"
+        placeholder="Email"
+        value={variables.username}
+        onChangeText={(username) => setVariables((curVariables) => ({ ...curVariables, username }))}
+      />
 
-      <TouchableOpacity onPress={changeTheme} style={{ marginVertical: 10, padding: 10, backgroundColor: 'green' }}>
-        <StyledText>Change theme</StyledText>
-      </TouchableOpacity>
+      <TextInput
+        style={input}
+        keyboardType="default"
+        placeholder="Password"
+        value={variables.password}
+        onChangeText={(password) => setVariables((curVariables) => ({ ...curVariables, password }))}
+      />
+
+      {loading && <ActivityIndicator />}
+
+      <Button title="Login" onPress={onLogin} disabled={loading} />
     </AppScreen>
   );
 };
