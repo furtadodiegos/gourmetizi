@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import type { FC, PropsWithChildren } from 'react';
 
 export interface StateProps {
@@ -14,7 +14,7 @@ const initialState: StateProps = {
 };
 
 const StateProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [state, setState] = React.useState<StateProps>(initialState);
+  const [state] = React.useState<StateProps>(initialState);
 
   const value = React.useMemo(
     () => ({

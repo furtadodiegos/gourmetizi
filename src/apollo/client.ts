@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { ApolloClient, from } from '@apollo/client';
 
 import authLink from './auth';

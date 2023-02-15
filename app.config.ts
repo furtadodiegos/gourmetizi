@@ -1,10 +1,23 @@
 import type { ExpoConfig } from '@expo/config';
 
-import { android, ios } from './configs';
+import { buildNumber } from './buildNumber';
+import { version } from './package.json';
 
 require('dotenv').config();
 
 const { APP_ENV } = process.env;
+
+const backgroundColor = {
+  production: {
+    backgroundColor: '#FFFFFF',
+  },
+  staging: {
+    backgroundColor: '#FF0590',
+  },
+  development: {
+    backgroundColor: '#7d24e1',
+  },
+};
 
 export default (): ExpoConfig => ({
   name: 'GourmetIzi',
@@ -22,17 +35,28 @@ export default (): ExpoConfig => ({
     url: 'https://u.expo.dev/3fa5b952-57d0-4d92-b97c-5437d885fec2',
   },
   assetBundlePatterns: ['**/*'],
-  runtimeVersion: {
-    policy: 'sdkVersion',
-  },
+  version,
   ios: {
-    ...ios,
-    bundleIdentifier: ios.bundleIdentifier[APP_ENV ?? 'development'],
+    usesAppleSignIn: true,
+    supportsTablet: true,
+    config: {
+      usesNonExemptEncryption: false,
+    },
+    // infoPlist: {
+    // NSLocationWhenInUseUsageDescription: 'We need to access your Location to send you relevant notifications.',
+    // },
+    runtimeVersion: version,
+    buildNumber: String(parseInt(buildNumber, 10) + 1),
+    bundleIdentifier: 'com.dfti.gourmetizi',
   },
   android: {
-    ...android,
-    package: android.package[APP_ENV ?? 'development'],
-    adaptiveIcon: { ...android.adaptiveIcon[APP_ENV ?? 'development'] },
+    runtimeVersion: version,
+    versionCode: parseInt(buildNumber, 10) + 1,
+    package: 'com.dfti.gourmetizi',
+    adaptiveIcon: {
+      foregroundImage: './assets/adaptive-icon.png',
+      backgroundColor: backgroundColor[APP_ENV ?? 'development'],
+    },
   },
   web: {
     favicon: './assets/favicon.png',

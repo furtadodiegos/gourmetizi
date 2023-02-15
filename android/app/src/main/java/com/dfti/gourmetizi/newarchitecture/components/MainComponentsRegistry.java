@@ -1,4 +1,4 @@
-package com.dfti.gourmetizi.development.newarchitecture.components;
+package com.dfti.gourmetizi.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;
