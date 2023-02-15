@@ -1,12 +1,14 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 import type { FC } from 'react';
+
+import { AppScreen } from '../../components';
 
 const HomeScreen: FC = () => {
   return (
-    <View>
+    <AppScreen withEdges={['top']}>
       <Text>HomeScreen</Text>
-    </View>
+    </AppScreen>
   );
 };
 

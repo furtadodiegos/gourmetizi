@@ -1,5 +1,4 @@
 import { useLazyQuery } from '@apollo/client';
-import { preventAutoHideAsync } from 'expo-splash-screen';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react';
 
@@ -31,8 +30,6 @@ const SetupProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      await preventAutoHideAsync();
-
       await getMe();
     })();
   }, [getMe]);

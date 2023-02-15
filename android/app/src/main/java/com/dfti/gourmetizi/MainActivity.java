@@ -1,4 +1,4 @@
-package com.dfti.gourmetizi.development;
+package com.dfti.gourmetizi;
 
 import android.os.Build;
 import android.os.Bundle;

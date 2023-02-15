@@ -24,3 +24,7 @@ runs:
     - name: Install dependencies
       run: yarn install --immutable
       shell: bash
+
+    - name: Expo pre build
+      run: yarn prebuild
+      shell: bash

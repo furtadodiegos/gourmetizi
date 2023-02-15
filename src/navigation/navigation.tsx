@@ -5,7 +5,6 @@ import type { FC } from 'react';
 
 import { AppSplashScreen } from '../components';
 import { useSetup } from '../contexts';
-import { OnboardingScreen } from '../screens';
 import DrawerNavigation from './drawerNavigation';
 import type { NestedNavigatorParams } from '.';
 import type { DrawerNavigationParams } from './drawerNavigation';
@@ -25,11 +24,7 @@ const AppNavigation: FC = () => {
   return (
     <NavigationContainer>
       <Navigator initialRouteName={me ? 'DrawerNavigation' : 'OnboardingScreen'} screenOptions={{ headerShown: false }}>
-        {me ? (
-          <Screen name="DrawerNavigation" component={DrawerNavigation} />
-        ) : (
-          <Screen name="OnboardingScreen" component={OnboardingScreen} />
-        )}
+        <Screen name="DrawerNavigation" component={DrawerNavigation} />
       </Navigator>
     </NavigationContainer>
   );

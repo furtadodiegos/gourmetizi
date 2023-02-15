@@ -1,12 +1,13 @@
 name: Submit
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - 'staging'
+      - 'main'
 
 jobs:
   update:
-    name: EAS Submit
+    name: EAS Updates
     runs-on: ubuntu-latest
     steps:
       - name: Check for EXPO_TOKEN
@@ -16,8 +17,59 @@ jobs:
             exit 1
           fi
 
-      - name: Setup EAS
+      - name: Initialize the git repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set BUMP_TYPE env for a minor or patch update
+        env:
+          GITHUB_REF: ${{ github.ref }}
+        run: |
+          echo -> ${{ GITHUB_REF }}
+          if [[ $GITHUB_REF == refs/heads/feature/*  ]]; then
+              export BUMP_TYPE=minor
+          else
+              export BUMP_TYPE=patch
+          fi
+          echo "BUMP_TYPE=$BUMP_TYPE"
+          echo -> ${{ env.BUMP_TYPE }}
+
+      - name: Set HAS_NATIVE_CHANGES env for native code changes
+        run: |
+          git diff --name-only HEAD~1 | grep -q "ios/" && export HAS_NATIVE_CHANGES=true || export HAS_NATIVE_CHANGES=false
+          echo "HAS_NATIVE_CHANGES=$HAS_NATIVE_CHANGES"
+
+      - name: Set CHANNEL env to define the deploy environment
+        run: |
+          if [[ github.head_ref || github.ref_name == 'staging' ]]; then
+              echo "CHANNEL=staging" >> "$CHANNEL"
+          else
+              echo "CHANNEL=production" >> "$CHANNEL"
+          fi
+
+      - name: Install dependencies
         uses: ./.github/actions/eas
 
-      - name: Publish update
-        run: eas update --branch ${{ github.ref_name }} --auto
+      - name: Update version
+        run: |
+          yarn version --${{ env.BUMP_TYPE }}
+
+      - name: Setup Expo
+        uses: expo/expo-github-action@v7
+        with:
+          expo-version: latest
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build native app
+        if: env.HAS_NATIVE_CHANGES == 'true'
+        run: eas build --profile ${{ env.CHANNEL }} --platform all --non-interactive --no-wait --auto-submit
+
+      - name: Build OTA update
+        run: eas update --branch ${{ env.CHANNEL }} --message "Up the app dev" --auto
+
+      - name: GIT Commit version update
+        run: |
+          git commit -a -m "versioning app"
+          git push -f origin HEAD:${{ github.head_ref || github.ref_name }}

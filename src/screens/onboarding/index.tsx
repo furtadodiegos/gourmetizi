@@ -22,7 +22,7 @@ const { input } = StyleSheet.create({
   },
 });
 
-const OnboardingScreen: FC<ScreenNavigationProps<'DrawerNavigation'>> = ({ navigation: { navigate } }) => {
+const OnboardingScreen: FC<ScreenNavigationProps<'DrawerNavigation'>> = () => {
   const { onLogin, loading, setVariables, variables } = useOnboarding();
 
   return (

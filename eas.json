@@ -1,15 +1,11 @@
 {
   "cli": {
-    "version": ">= 0.57.0"
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
       "developmentClient": true,
       "distribution": "internal"
-    },
-    "preview": {
-      "distribution": "internal",
-      "channel": "staging"
     },
     "staging": {
       "channel": "staging"
@@ -23,14 +19,15 @@
     "production": {},
     "staging": {
       "android": {
+        "serviceAccountKeyPath": "./android/google-services.json",
         "track": "internal",
-        "applicationId": "com.dfti.gourmetizi.staging",
+        "applicationId": "com.dfti.gourmetizi",
         "releaseStatus": "completed"
       },
       "ios": {
         "appleId": "dfti.apps@gmail.com",
         "appleTeamId": "9K5YUJ96KS",
-        "bundleIdentifier": "com.dfti.gourmetizi.staging",
+        "bundleIdentifier": "com.dfti.gourmetizi",
         "ascAppId": "1665180188"
       }
     }

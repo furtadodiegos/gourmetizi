@@ -1,4 +1,4 @@
-package com.dfti.gourmetizi.development.newarchitecture.modules;
+package com.dfti.gourmetizi.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
