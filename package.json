@@ -1,14 +1,13 @@
 {
   "name": "gourmetizi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
+    "build": "expo prebuild -p all && eas build --profile staging --platform ios --non-interactive --no-wait --auto-submit",
     "start": "expo start --dev-client",
     "server": "tsx watch ./server",
     "postinstall": "yarn generate:gql:types",
     "android": "expo run:android",
-    "e:android": "expo run:android",
     "ios": "expo run:ios",
-    "e:ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "eslint ./src --ext .ts,.tsx --fix",
     "prettify": "prettier --write ./src",
