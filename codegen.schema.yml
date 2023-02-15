@@ -1,0 +1,9 @@
+overwrite: true
+schema:
+  ${API_URL}:
+    headers:
+      'x-api-admin-secret': ${API_ADMIN_SECRET}
+generates:
+  ./src/graphql/graphql.schema.json:
+    plugins:
+      - introspection
