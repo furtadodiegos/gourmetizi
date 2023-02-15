@@ -7,7 +7,7 @@ import { AppScreen } from '../../components';
 const HomeScreen: FC = () => {
   return (
     <AppScreen withEdges={['top']}>
-      <Text>HomeScreen</Text>
+      <Text>HomeScreen a</Text>
     </AppScreen>
   );
 };
