@@ -32,7 +32,6 @@ jobs:
               export BUMP_TYPE=patch
           fi
           echo "BUMP_TYPE=$BUMP_TYPE"
-          echo $BUMP_TYPE
 
       - name: Set HAS_NATIVE_CHANGES env for native code changes
         run: |
@@ -42,10 +41,11 @@ jobs:
       - name: Set CHANNEL env to define the deploy environment
         run: |
           if [[ github.head_ref || github.ref_name == 'staging' ]]; then
-              echo "CHANNEL=staging" >> "$CHANNEL"
+              export CHANNEL=staging
           else
-              echo "CHANNEL=production" >> "$CHANNEL"
+              export CHANNEL=production
           fi
+          echo "CHANNEL=$CHANNEL"
 
       - name: Install dependencies
         uses: ./.github/actions/eas
