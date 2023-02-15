@@ -26,14 +26,13 @@ jobs:
         env:
           GITHUB_REF: ${{ github.ref }}
         run: |
-          echo -> $GITHUB_REF
           if [[ $GITHUB_REF == refs/heads/feature/*  ]]; then
               export BUMP_TYPE=minor
           else
               export BUMP_TYPE=patch
           fi
           echo "BUMP_TYPE=$BUMP_TYPE"
-          echo -> ${{ env.BUMP_TYPE }}
+          echo $BUMP_TYPE
 
       - name: Set HAS_NATIVE_CHANGES env for native code changes
         run: |
