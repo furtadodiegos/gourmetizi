@@ -7,15 +7,9 @@ require('dotenv').config();
 const { APP_ENV } = process.env;
 
 const backgroundColor = {
-  production: {
-    backgroundColor: '#FFFFFF',
-  },
-  staging: {
-    backgroundColor: '#FF0590',
-  },
-  development: {
-    backgroundColor: '#7d24e1',
-  },
+  production: '#FFFFFF',
+  staging: '#FF0590',
+  development: '#7d24e1',
 };
 
 export default (): ExpoConfig => ({
@@ -54,7 +48,7 @@ export default (): ExpoConfig => ({
     package: 'com.dfti.gourmetizi',
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
-      backgroundColor: backgroundColor[APP_ENV ?? 'development'],
+      backgroundColor: backgroundColor[APP_ENV || 'development'],
     },
   },
   web: {
