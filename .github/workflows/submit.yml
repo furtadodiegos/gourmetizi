@@ -29,10 +29,11 @@ jobs:
           else
               export CHANNEL=production
           fi
-          echo "CHANNEL=$CHANNEL"
-      # echo "EXPO_BRANCH=staging" >> "$GITHUB_ENV"
+          echo "CHANNEL=$CHANNEL" >> "$GITHUB_ENV"
+
       - name: Test env name
-        run: echo ${{env.CHANNEL}}
+        run: echo ${{ env.CHANNEL }}
+
       # - name: Set BUMP_TYPE env for a minor or patch update
       #   if: env.CHANNEL == 'staging'
       #   env:
