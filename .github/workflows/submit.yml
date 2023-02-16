@@ -22,22 +22,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set BUMP_TYPE env for a minor or patch update
-        env:
-          GITHUB_REF: ${{ github.ref }}
-        run: |
-          if [[ $GITHUB_REF == refs/heads/feature/*  ]]; then
-              export BUMP_TYPE=minor
-          else
-              export BUMP_TYPE=patch
-          fi
-          echo "BUMP_TYPE=$BUMP_TYPE"
-
-      - name: Set HAS_NATIVE_CHANGES env for native code changes
-        run: |
-          git diff --name-only HEAD~1 | grep -q "ios/" && export HAS_NATIVE_CHANGES=true || export HAS_NATIVE_CHANGES=false
-          echo "HAS_NATIVE_CHANGES=$HAS_NATIVE_CHANGES"
-
       - name: Set CHANNEL env to define the deploy environment
         run: |
           if [[ github.head_ref || github.ref_name == 'staging' ]]; then
@@ -47,12 +31,31 @@ jobs:
           fi
           echo "CHANNEL=$CHANNEL"
 
-      - name: Install dependencies
-        uses: ./.github/actions/eas
+      - name: Set BUMP_TYPE env for a minor or patch update
+        if: env.CHANNEL == 'staging'
+        env:
+          GITHUB_REF: ${{ github.ref }}
+        run: |
+          if [[ $GITHUB_REF == refs/heads/feature/*  ]]; then
+              export BUMP_TYPE=feature
+          else
+              export BUMP_TYPE=fix
+          fi
+          echo "BUMP_TYPE=$BUMP_TYPE"
 
       - name: Update version
+        if: env.CHANNEL == 'staging'
         run: |
-          yarn version --${{ env.BUMP_TYPE }}
+          new_version=$(node -e "process.stdout.write(require('./buildNumber.js')('${{ env.BUMP_TYPE }}'))")
+          yarn version --new-version "$new_version" --no-git-tag-version
+
+      - name: Set HAS_NATIVE_CHANGES env for native code changes
+        run: |
+          git diff --name-only HEAD~1 | grep -q "ios/" && export HAS_NATIVE_CHANGES=true || export HAS_NATIVE_CHANGES=false
+          echo "HAS_NATIVE_CHANGES=$HAS_NATIVE_CHANGES"
+
+      - name: Install dependencies
+        uses: ./.github/actions/eas
 
       - name: Setup Expo
         uses: expo/expo-github-action@v7
