@@ -49,13 +49,13 @@ jobs:
           new_version=$(node -e "process.stdout.write(require('./buildNumber.js')('${{ env.BUMP_TYPE }}'))")
           yarn version --new-version "$new_version" --no-git-tag-version
 
+      - name: Install dependencies
+        uses: ./.github/actions/eas
+
       - name: Set HAS_NATIVE_CHANGES env for native code changes
         run: |
           git diff --name-only HEAD~1 | grep -q "ios/" && export HAS_NATIVE_CHANGES=true || export HAS_NATIVE_CHANGES=false
           echo "HAS_NATIVE_CHANGES=$HAS_NATIVE_CHANGES" >> "$GITHUB_ENV"
-
-      - name: Install dependencies
-        uses: ./.github/actions/eas
 
       - name: Setup Expo
         uses: expo/expo-github-action@v7
@@ -72,6 +72,8 @@ jobs:
         run: eas update --branch ${{ env.CHANNEL }} --message "Up the app dev" --auto
 
       - name: GIT Commit version update
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
         run: |
           git commit -a -m "versioning app"
           git push -f origin HEAD:${{ github.head_ref || github.ref_name }}
