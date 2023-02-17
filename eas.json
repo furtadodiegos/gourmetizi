@@ -3,16 +3,22 @@
     "appVersionSource": "remote"
   },
   "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
-    },
-    "staging": {
-      "channel": "staging"
-    },
     "production": {
       "channel": "production",
-      "autoIncrement": true
+      "ios": { "resourceClass": "m1-medium" },
+      "env": { "APP_ENV": "production" },
+      "cache": { "key": "invalidate1" }
+    },
+    "development": {
+      "extends": "production",
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": { "APP_ENV": "development" }
+    },
+    "staging": {
+      "extends": "production",
+      "channel": "staging",
+      "env": { "APP_ENV": "staging" }
     }
   },
   "submit": {

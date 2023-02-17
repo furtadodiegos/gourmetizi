@@ -1,9 +1,11 @@
 name: Submit
 on:
-  push:
+  pull_request:
     branches:
-      - 'staging'
+      - 'develop'
       - 'main'
+    types:
+      - 'closed'
 
 jobs:
   update:
@@ -22,38 +24,40 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set CHANNEL env to define the deploy environment
+        run: |
+          if [[ github.head_ref || github.ref_name == 'develop' ]]; then
+              export CHANNEL=staging
+          else
+              export CHANNEL=production
+          fi
+          echo "CHANNEL=$CHANNEL" >> "$GITHUB_ENV"
+
       - name: Set BUMP_TYPE env for a minor or patch update
+        if: env.CHANNEL == 'staging'
         env:
           GITHUB_REF: ${{ github.ref }}
         run: |
-          echo -> $GITHUB_REF
           if [[ $GITHUB_REF == refs/heads/feature/*  ]]; then
-              export BUMP_TYPE=minor
+              export BUMP_TYPE=feature
           else
-              export BUMP_TYPE=patch
+              export BUMP_TYPE=fix
           fi
-          echo "BUMP_TYPE=$BUMP_TYPE"
-          echo -> ${{ env.BUMP_TYPE }}
+          echo "BUMP_TYPE=$BUMP_TYPE" >> "$GITHUB_ENV"
 
-      - name: Set HAS_NATIVE_CHANGES env for native code changes
+      - name: Update version
+        if: env.CHANNEL == 'staging'
         run: |
-          git diff --name-only HEAD~1 | grep -q "ios/" && export HAS_NATIVE_CHANGES=true || export HAS_NATIVE_CHANGES=false
-          echo "HAS_NATIVE_CHANGES=$HAS_NATIVE_CHANGES"
-
-      - name: Set CHANNEL env to define the deploy environment
-        run: |
-          if [[ github.head_ref || github.ref_name == 'staging' ]]; then
-              echo "CHANNEL=staging" >> "$CHANNEL"
-          else
-              echo "CHANNEL=production" >> "$CHANNEL"
-          fi
+          new_version=$(node -e "process.stdout.write(require('./buildNumber.js')('${{ env.BUMP_TYPE }}'))")
+          yarn version --new-version "$new_version" --no-git-tag-version
 
       - name: Install dependencies
         uses: ./.github/actions/eas
 
-      - name: Update version
+      - name: Set HAS_NATIVE_CHANGES env for native code changes
         run: |
-          yarn version --${{ env.BUMP_TYPE }}
+          if git diff --name-only HEAD^..HEAD | grep --quiet package.json
+          echo "HAS_NATIVE_CHANGES=$HAS_NATIVE_CHANGES" >> "$GITHUB_ENV"
 
       - name: Setup Expo
         uses: expo/expo-github-action@v7
@@ -70,6 +74,9 @@ jobs:
         run: eas update --branch ${{ env.CHANNEL }} --message "Up the app dev" --auto
 
       - name: GIT Commit version update
+        if: env.CHANNEL == 'staging'
         run: |
+          git config user.name ${{ secrets.GIT_AUTHOR_NAME }}
+          git config user.email ${{ secrets.GIT_AUTHOR_EMAIL }}
           git commit -a -m "versioning app"
           git push -f origin HEAD:${{ github.head_ref || github.ref_name }}
